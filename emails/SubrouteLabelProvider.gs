@@ -72,9 +72,9 @@ function getSubroute(emailAddress) {
  *     The labels from the subroute.
  */
 function getLabelsFromSubroute(subroute, createIfNecessary = false) {
-  var labelNames = [];
+  const labelNames = [];
   for (const subroutePart of subroute.split(LABEL_SEP)) {
-    var labelChain = [];
+    const labelChain = [];
     for (const tag of subroutePart.split(LABEL_SUBLABEL)) {
       const tagParts = tag.split(LABEL_SPACE);
       labelChain.push(
