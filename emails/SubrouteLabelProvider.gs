@@ -12,7 +12,8 @@ const LABEL_CREATORS = [
 // Handy constants.
 const EMAIL_AT = "@";
 const EMAIL_TAG = "+";
-const LABEL_SEP = ".";
+const LABEL_SEP = "+";
+const LABEL_SUBLABEL = ".";
 const LABEL_SPACE = "_";
 const RECIPIENT_PATTERN = '^".+" <(.+)>$';
 
@@ -60,8 +61,8 @@ function getSubroute(emailAddress) {
 /**
  * Parse the labels indicated by a subroute of an e-mail.
  * 
- * For instance, the labels of a subroute 'abc+def.foo_bar.biz'
- * are Abc/Def, Foo Bar and Biz.
+ * For instance, the labels of a subroute 'abc.def+foo_bar+biz'
+ * are 'Abc/Def', 'Foo Bar' and 'Biz'.
  *
  * @function getLabelsFromSubroute
  * @private
@@ -74,7 +75,7 @@ function getLabelsFromSubroute(subroute, createIfNecessary = false) {
   var labelNames = [];
   for (const subroutePart of subroute.split(LABEL_SEP)) {
     var labelChain = [];
-    for (const tag of subroutePart.split(EMAIL_TAG)) {
+    for (const tag of subroutePart.split(LABEL_SUBLABEL)) {
       const tagParts = tag.split(LABEL_SPACE);
       labelChain.push(
         tagParts.map(
