@@ -76,7 +76,7 @@ function getLabelsFromSubroute(subroute, createIfNecessary = false) {
   const labelNames = subroute.split(LABEL_SEP).map(
     subroutePart => subroutePart.split(LABEL_SUBLABEL).map(
       tag => tag.split(LABEL_SPACE).map(makeTitle).join(" "),
-    ).join("/")
+    ).join("/"),
   );
   return labelNames.map(
     labelName => getLabel(labelName, createIfNecessary),
