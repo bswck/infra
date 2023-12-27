@@ -18,8 +18,9 @@ const LABEL_SPACE = "_";
 const RECIPIENT_PATTERN = '^".+" <(.+)>$';
 
 // Utilities.
-const repr = JSON.stringify;
 const identity = obj => obj;
+const makeTitle = string => string[0].toUpperCase() + string.substring(1).toLowerCase();
+const repr = JSON.stringify;
 
 /**
  * Parse an e-mail address into two parts: localPart and domain.
@@ -72,21 +73,13 @@ function getSubroute(emailAddress) {
  *     The labels from the subroute.
  */
 function getLabelsFromSubroute(subroute, createIfNecessary = false) {
-  const labelNames = [];
-  for (const subroutePart of subroute.split(LABEL_SEP)) {
-    const labelChain = [];
-    for (const tag of subroutePart.split(LABEL_SUBLABEL)) {
-      const tagParts = tag.split(LABEL_SPACE);
-      labelChain.push(
-        tagParts.map(
-          part => part[0].toUpperCase() + part.substring(1).toLowerCase()
-        ).join(" ")
-      );
-    }
-    labelNames.push(labelChain.join("/"));
-  }
+  const labelNames = subroute.split(LABEL_SEP).map(
+    subroutePart => subroutePart.split(LABEL_SUBLABEL).map(
+      tag => tag.split(LABEL_SPACE).map(makeTitle).join(" "),
+    ).join("/")
+  );
   return labelNames.map(
-    labelName => getLabel(labelName, createIfNecessary)
+    labelName => getLabel(labelName, createIfNecessary),
   ).filter(identity);
 }
 
@@ -152,11 +145,11 @@ function addLabelsToThread(thread) {
     const labels = getLabelsFromSubroute(
       subroute,
       LABEL_CREATORS.includes(getEmailParts(senderAddress).domain),
-    );
+    ).filter(label => !thread.getLabels().includes(label));
 
     if (labels.length) {
       const labelNames = labels.map(
-        label => label.getName()
+        label => label.getName(),
       ).map(repr).join(", ");
       labels.map(label => thread.addLabel(label));
 
