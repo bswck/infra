@@ -135,7 +135,7 @@ function addLabelsToThread(thread) {
     of thread.getMessages().map(
       message => [
         message.getFrom(),
-        message.getTo()
+        message.getTo(),
       ].map(extractAddress)
     )
   ) {
