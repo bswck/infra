@@ -136,7 +136,7 @@ function addLabelsToThread(thread) {
       message => [
         message.getFrom(),
         message.getTo(),
-      ].map(extractAddress)
+      ].map(extractAddress),
     )
   ) {
     if (!(senderAddress && recipientAddress)) continue;
